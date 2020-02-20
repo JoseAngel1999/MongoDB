@@ -1,0 +1,45 @@
+import org.bson.Document;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import static com.mongodb.client.model.Filters.*;
+
+public class HarryPotter {
+
+	public static void main(String[] args) {
+		MongoClient conexion = MongoClients.create("mongodb://localhost:27017");
+		MongoDatabase database = conexion.getDatabase("Practica");
+		MongoCollection<Document> harry = database.getCollection("HarryP");
+		//Ejecutamos el metodo
+		listConsultas(harry);
+		
+
+	}
+	public static void listConsultas(MongoCollection<Document> harry){ 
+
+		FindIterable<Document> busquedaspecies = harry.find(eq("species", "human"));
+		for (Document harry1 : busquedaspecies) {
+			System.out.println(harry1.toJson());
+		}
+
+		FindIterable<Document> busquedayearOfBirth = harry.find(lt("yearOfBirth", 1979));
+
+		for (Document harry2 : busquedayearOfBirth) {
+			System.out.println(harry2.toJson());
+		}
+
+		FindIterable<Document> busquedawood = harry.find(eq("wand.wood", "holly"));
+
+		for (Document harry3 : busquedawood) {
+			System.out.println(harry3.toJson());
+		}
+
+		FindIterable<Document> busquedaalive = harry.find(and(eq("alive", true), eq("hogwartsStudent", true)));
+
+		for (Document harry4 : busquedaalive) {
+			System.out.println(harry4.toJson());
+		}
+	}
+}
